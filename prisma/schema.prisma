@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Season {
+  id                  String             @id @default(cuid())
+  name                String
+  startDate           DateTime
+  endDate             DateTime
+  estimatedRentalCost Decimal            @db.Decimal(10, 2)
+  currency            String             @default("CZK")
+  isActive            Boolean            @default(true)
+  createdAt           DateTime           @default(now())
+  schedules           PracticeSchedule[]
+  practices           Practice[]
+  seasonPlayers       SeasonPlayer[]
+  deposits            Deposit[]
+  rentalCosts         RentalCost[]
+}
+
+model Player {
+  id            String         @id @default(cuid())
+  name          String
+  contact       String?
+  createdAt     DateTime       @default(now())
+  seasonPlayers SeasonPlayer[]
+  deposits      Deposit[]
+  attendances   Attendance[]
+}
+
+model SeasonPlayer {
+  id       String   @id @default(cuid())
+  seasonId String
+  playerId String
+  active   Boolean  @default(true)
+  joinedAt DateTime @default(now())
+  season   Season   @relation(fields: [seasonId], references: [id])
+  player   Player   @relation(fields: [playerId], references: [id])
+
+  @@unique([seasonId, playerId])
+}
+
+model PracticeSchedule {
+  id        String  @id @default(cuid())
+  seasonId  String
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  location  String
+  active    Boolean @default(true)
+  season    Season  @relation(fields: [seasonId], references: [id])
+}
+
+model Practice {
+  id          String       @id @default(cuid())
+  seasonId    String
+  date        DateTime
+  startTime   String
+  endTime     String
+  location    String
+  status      String       @default("scheduled")
+  notes       String?
+  season      Season       @relation(fields: [seasonId], references: [id])
+  attendances Attendance[]
+  rentalCosts RentalCost[]
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  practiceId String
+  playerId   String?
+  adHocName  String?
+  type       String
+  confirmed  Boolean  @default(true)
+  adHocFee   Decimal? @db.Decimal(10, 2)
+  createdAt  DateTime @default(now())
+  practice   Practice @relation(fields: [practiceId], references: [id])
+  player     Player?  @relation(fields: [playerId], references: [id])
+}
+
+model Deposit {
+  id        String   @id @default(cuid())
+  seasonId  String
+  playerId  String
+  amount    Decimal  @db.Decimal(10, 2)
+  date      DateTime
+  note      String?
+  createdAt DateTime @default(now())
+  season    Season   @relation(fields: [seasonId], references: [id])
+  player    Player   @relation(fields: [playerId], references: [id])
+}
+
+model RentalCost {
+  id         String    @id @default(cuid())
+  seasonId   String
+  practiceId String?
+  amount     Decimal   @db.Decimal(10, 2)
+  date       DateTime
+  vendor     String?
+  note       String?
+  createdAt  DateTime  @default(now())
+  season     Season    @relation(fields: [seasonId], references: [id])
+  practice   Practice? @relation(fields: [practiceId], references: [id])
+}
