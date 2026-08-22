@@ -1,9 +1,8 @@
 import { prisma } from '@/lib/prisma';
-import { AdminLayout } from '@/components/ui/AdminLayout';
 import { SeasonSelector } from '@/components/ui/SeasonSelector';
-import { formatDate, formatCZK } from '@/lib/utils';
 import { createDepositAction, deleteDepositAction } from './actions';
 
+export const dynamic = 'force-dynamic';
 export default async function DepositsPage({
   searchParams,
 }: {

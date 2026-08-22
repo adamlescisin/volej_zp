@@ -1,9 +1,8 @@
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/prisma';
 import { AdminLayout } from '@/components/ui/AdminLayout';
-import { formatDate, formatCZK } from '@/lib/utils';
 import Link from 'next/link';
-import {
+
+export const dynamic = 'force-dynamic';
   updatePractice,
   toggleAttendance,
   addAdHocAttendee,

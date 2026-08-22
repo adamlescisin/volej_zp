@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { formatDate, formatCZK } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const seasons = await prisma.season.findMany({
     orderBy: { startDate: 'desc' },

@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { AdminLayout } from '@/components/ui/AdminLayout';
 import { SeasonSelector } from '@/components/ui/SeasonSelector';
-import { createScheduleAction, deleteScheduleAction, generatePracticesAction } from './actions';
+
+export const dynamic = 'force-dynamic';
 
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

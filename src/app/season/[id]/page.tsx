@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { computeSeasonStats } from '@/lib/calculations';
 import { formatCZK, formatDate } from '@/lib/utils';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SeasonDetailPage({ params }: { params: { id: string } }) {
   const season = await prisma.season.findUnique({
     where: { id: params.id },

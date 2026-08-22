@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { AdminLayout } from '@/components/ui/AdminLayout';
 import { createPlayerAction, assignToSeasonAction, removeFromSeasonAction } from './actions';
 
+export const dynamic = 'force-dynamic';
 export default async function PlayersPage() {
   const [players, seasons] = await Promise.all([
     prisma.player.findMany({

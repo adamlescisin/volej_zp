@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
-import { AdminLayout } from '@/components/ui/AdminLayout';
 import { formatDate, formatCZK, formatDateInput } from '@/lib/utils';
-import { createSeasonAction, toggleSeasonActiveAction } from './actions';
+
+export const dynamic = 'force-dynamic';
 
 export default async function SeasonsPage() {
   const seasons = await prisma.season.findMany({ orderBy: { startDate: 'desc' } });
