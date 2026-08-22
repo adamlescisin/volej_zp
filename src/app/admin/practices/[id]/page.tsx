@@ -1,13 +1,16 @@
 import { notFound } from 'next/navigation';
+import { prisma } from '@/lib/prisma';
 import { AdminLayout } from '@/components/ui/AdminLayout';
+import { formatDate, formatCZK } from '@/lib/utils';
 import Link from 'next/link';
-
-export const dynamic = 'force-dynamic';
+import {
   updatePractice,
   toggleAttendance,
   addAdHocAttendee,
   removeAttendee,
 } from '../actions';
+
+export const dynamic = 'force-dynamic';
 
 export default async function PracticeDetailPage({ params }: { params: { id: string } }) {
   const practice = await prisma.practice.findUnique({
