@@ -24,7 +24,7 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password
+              Heslo
             </label>
             <input
               id="password"
@@ -35,13 +35,13 @@ export default function LoginPage() {
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+          {error && <p className="text-red-600 text-sm">Nesprávné heslo</p>}
           <button
             type="submit"
             disabled={isPending}
             className="w-full bg-blue-600 text-white rounded-md py-2 font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
           >
-            {isPending ? 'Logging in…' : 'Log in'}
+            {isPending ? 'Přihlašování…' : 'Přihlásit se'}
           </button>
         </form>
       </div>

@@ -16,29 +16,29 @@ export default async function PlayersPage() {
 
   return (
     <AdminLayout>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Players</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Hráči</h1>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-        <h2 className="text-lg font-semibold mb-4">Add New Player</h2>
+        <h2 className="text-lg font-semibold mb-4">Přidat nového hráče</h2>
         <form action={createPlayerAction} className="flex gap-3 flex-wrap">
           <input
             name="name"
             type="text"
             required
-            placeholder="Player name"
+            placeholder="Jméno hráče"
             className="flex-1 min-w-48 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <input
             name="contact"
             type="text"
-            placeholder="Contact (optional)"
+            placeholder="Kontakt (nepovinné)"
             className="flex-1 min-w-48 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <button
             type="submit"
             className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"
           >
-            Add Player
+            Přidat hráče
           </button>
         </form>
       </div>
@@ -61,7 +61,7 @@ export default async function PlayersPage() {
               </div>
 
               <div className="mt-3 pt-3 border-t border-gray-100">
-                <p className="text-sm font-medium text-gray-600 mb-2">Season membership:</p>
+                <p className="text-sm font-medium text-gray-600 mb-2">Členství v sezónách:</p>
                 <div className="flex flex-wrap gap-2">
                   {allSeasons.map(season => {
                     const isAssigned = activeSeasonIds.has(season.id);
@@ -87,7 +87,7 @@ export default async function PlayersPage() {
                     );
                   })}
                   {allSeasons.length === 0 && (
-                    <span className="text-sm text-gray-400">No seasons yet.</span>
+                    <span className="text-sm text-gray-400">Zatím žádné sezóny.</span>
                   )}
                 </div>
               </div>
@@ -95,7 +95,7 @@ export default async function PlayersPage() {
           );
         })}
         {players.length === 0 && (
-          <p className="text-gray-500 text-center py-8">No players yet. Add one above.</p>
+          <p className="text-gray-500 text-center py-8">Zatím žádní hráči. Přidejte jednoho výše.</p>
         )}
       </div>
     </AdminLayout>

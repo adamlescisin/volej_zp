@@ -35,7 +35,7 @@ export default async function CostsPage({
   return (
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Rental Costs</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Náklady na nájem</h1>
         <SeasonSelector seasons={seasons} selectedId={selectedSeasonId} basePath="/admin/costs" />
       </div>
 
@@ -44,15 +44,15 @@ export default async function CostsPage({
           {selectedSeason && (
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="text-sm text-gray-500">Estimated Total</div>
+                <div className="text-sm text-gray-500">Odhadovaná celková částka</div>
                 <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(estimatedTotal)}</div>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="text-sm text-gray-500">Actual Costs Logged</div>
+                <div className="text-sm text-gray-500">Skutečné náklady</div>
                 <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalActual)}</div>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="text-sm text-gray-500">Variance</div>
+                <div className="text-sm text-gray-500">Odchylka</div>
                 <div className={`text-xl font-bold mt-1 ${totalActual > estimatedTotal ? 'text-red-600' : 'text-green-600'}`}>
                   {totalActual > estimatedTotal ? '+' : ''}{formatCZK(totalActual - estimatedTotal)}
                 </div>
@@ -61,23 +61,23 @@ export default async function CostsPage({
           )}
 
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-lg font-semibold mb-4">Log Rental Cost</h2>
+            <h2 className="text-lg font-semibold mb-4">Zapsat náklady na nájem</h2>
             <form action={createRentalCostAction} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <input type="hidden" name="seasonId" value={selectedSeasonId} />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Amount (CZK)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Částka (Kč)</label>
                 <input
                   name="amount"
                   type="number"
                   min="0"
                   step="100"
                   required
-                  placeholder="e.g. 800"
+                  placeholder="např. 800"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Datum</label>
                 <input
                   name="date"
                   type="date"
@@ -87,12 +87,12 @@ export default async function CostsPage({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Link to Practice (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Propojit s tréninkem (nepovinné)</label>
                 <select
                   name="practiceId"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">— None —</option>
+                  <option value="">— Žádný —</option>
                   {practices.map(p => (
                     <option key={p.id} value={p.id}>
                       {formatDate(p.date)} — {p.location}
@@ -101,20 +101,20 @@ export default async function CostsPage({
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Vendor (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Dodavatel (nepovinné)</label>
                 <input
                   name="vendor"
                   type="text"
-                  placeholder="e.g. Sports Hall A"
+                  placeholder="např. Sportovní hala A"
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Note (optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Poznámka (nepovinné)</label>
                 <input
                   name="note"
                   type="text"
-                  placeholder="Invoice #, etc."
+                  placeholder="Č. faktury, atd."
                   className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -123,7 +123,7 @@ export default async function CostsPage({
                   type="submit"
                   className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium text-sm"
                 >
-                  Log Cost
+                  Zapsat náklady
                 </button>
               </div>
             </form>
@@ -131,19 +131,21 @@ export default async function CostsPage({
 
           <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <div className="px-6 py-4 border-b border-gray-100">
-              <h2 className="font-semibold text-gray-800">{rentalCosts.length} cost record{rentalCosts.length !== 1 ? 's' : ''}</h2>
+              <h2 className="font-semibold text-gray-800">
+                {rentalCosts.length} {rentalCosts.length === 1 ? 'záznam nákladů' : rentalCosts.length < 5 ? 'záznamy nákladů' : 'záznamů nákladů'}
+              </h2>
             </div>
             {rentalCosts.length === 0 ? (
-              <p className="text-gray-500 text-sm p-6">No costs logged for this season.</p>
+              <p className="text-gray-500 text-sm p-6">Žádné náklady pro tuto sezónu.</p>
             ) : (
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 text-gray-600">
                   <tr>
-                    <th className="text-left px-6 py-3 font-medium">Date</th>
-                    <th className="text-right px-6 py-3 font-medium">Amount</th>
-                    <th className="text-left px-6 py-3 font-medium">Practice</th>
-                    <th className="text-left px-6 py-3 font-medium">Vendor</th>
-                    <th className="text-left px-6 py-3 font-medium">Note</th>
+                    <th className="text-left px-6 py-3 font-medium">Datum</th>
+                    <th className="text-right px-6 py-3 font-medium">Částka</th>
+                    <th className="text-left px-6 py-3 font-medium">Trénink</th>
+                    <th className="text-left px-6 py-3 font-medium">Dodavatel</th>
+                    <th className="text-left px-6 py-3 font-medium">Poznámka</th>
                     <th className="px-6 py-3"></th>
                   </tr>
                 </thead>
@@ -160,7 +162,7 @@ export default async function CostsPage({
                       <td className="px-6 py-3 text-right">
                         <form action={deleteRentalCostAction.bind(null, cost.id)}>
                           <button type="submit" className="text-red-400 hover:text-red-600 text-xs">
-                            Delete
+                            Smazat
                           </button>
                         </form>
                       </td>
@@ -172,7 +174,7 @@ export default async function CostsPage({
           </div>
         </>
       ) : (
-        <p className="text-gray-500">Please select a season.</p>
+        <p className="text-gray-500">Prosím vyberte sezónu.</p>
       )}
     </AdminLayout>
   );

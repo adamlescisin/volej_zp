@@ -5,7 +5,7 @@ import { createScheduleAction, deleteScheduleAction, generatePracticesAction } f
 
 export const dynamic = 'force-dynamic';
 
-const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const DAY_NAMES = ['Neděle', 'Pondělí', 'Úterý', 'Středa', 'Čtvrtek', 'Pátek', 'Sobota'];
 
 export default async function SchedulePage({
   searchParams,
@@ -25,19 +25,19 @@ export default async function SchedulePage({
   return (
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Practice Schedule</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Rozvrh tréninků</h1>
         <SeasonSelector seasons={seasons} selectedId={selectedSeasonId} basePath="/admin/schedule" />
       </div>
 
       {selectedSeasonId ? (
         <>
-          {/* Add schedule entry */}
+          {/* Přidat záznam do rozvrhu */}
           <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Add Schedule Entry</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Přidat záznam do rozvrhu</h2>
             <form action={createScheduleAction} className="grid grid-cols-2 md:grid-cols-3 gap-4">
               <input type="hidden" name="seasonId" value={selectedSeasonId} />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Day of Week</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Den v týdnu</label>
                 <select
                   name="dayOfWeek"
                   required
@@ -49,7 +49,7 @@ export default async function SchedulePage({
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Čas začátku</label>
                 <input
                   name="startTime"
                   type="time"
@@ -59,7 +59,7 @@ export default async function SchedulePage({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">End Time</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Čas konce</label>
                 <input
                   name="endTime"
                   type="time"
@@ -69,11 +69,11 @@ export default async function SchedulePage({
                 />
               </div>
               <div className="col-span-2 md:col-span-3">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Místo</label>
                 <input
                   name="location"
                   required
-                  placeholder="e.g. Sports Hall A"
+                  placeholder="např. Sportovní hala A"
                   className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -82,15 +82,15 @@ export default async function SchedulePage({
                   type="submit"
                   className="bg-blue-600 text-white px-5 py-2 rounded text-sm font-medium hover:bg-blue-700 transition"
                 >
-                  Add Schedule
+                  Přidat rozvrh
                 </button>
               </div>
             </form>
           </div>
 
-          {/* Existing schedules */}
+          {/* Existující záznamy */}
           {schedules.length === 0 ? (
-            <p className="text-gray-500 text-sm">No schedules for this season.</p>
+            <p className="text-gray-500 text-sm">Žádný rozvrh pro tuto sezónu.</p>
           ) : (
             <div className="space-y-3">
               {schedules.map(schedule => (
@@ -106,7 +106,7 @@ export default async function SchedulePage({
                         type="submit"
                         className="text-sm bg-green-600 text-white px-3 py-1.5 rounded hover:bg-green-700 transition"
                       >
-                        Generate Practices
+                        Generovat tréninky
                       </button>
                     </form>
                     <form action={deleteScheduleAction.bind(null, schedule.id)}>
@@ -114,7 +114,7 @@ export default async function SchedulePage({
                         type="submit"
                         className="text-sm bg-red-100 text-red-600 px-3 py-1.5 rounded hover:bg-red-200 transition"
                       >
-                        Delete
+                        Smazat
                       </button>
                     </form>
                   </div>
@@ -124,7 +124,7 @@ export default async function SchedulePage({
           )}
         </>
       ) : (
-        <p className="text-gray-500">Please select a season.</p>
+        <p className="text-gray-500">Prosím vyberte sezónu.</p>
       )}
     </AdminLayout>
   );

@@ -6,6 +6,12 @@ import { formatCZK, formatDate } from '@/lib/utils';
 
 export const dynamic = 'force-dynamic';
 
+function statusLabel(status: string) {
+  if (status === 'completed') return 'Odehráno';
+  if (status === 'cancelled') return 'Zrušeno';
+  return 'Naplánováno';
+}
+
 export default async function SeasonDetailPage({ params }: { params: { id: string } }) {
   const season = await prisma.season.findUnique({
     where: { id: params.id },
@@ -43,58 +49,58 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
     <div className="min-h-screen bg-gray-50">
       <header className="bg-blue-700 text-white py-4 px-4 shadow">
         <div className="max-w-5xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-blue-200 hover:text-white text-sm">← Home</Link>
+          <Link href="/" className="text-blue-200 hover:text-white text-sm">← Domů</Link>
           <div>
             <h1 className="text-xl font-bold">{season.name}</h1>
             <p className="text-blue-200 text-sm">{formatDate(season.startDate)} – {formatDate(season.endDate)}</p>
           </div>
           {season.isActive && (
-            <span className="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">Active</span>
+            <span className="ml-auto bg-green-500 text-white text-xs px-2 py-1 rounded-full">Aktivní</span>
           )}
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8 space-y-8">
-        {/* Summary card */}
+        {/* Přehled sezóny */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="text-sm text-gray-500">Estimated Budget</div>
+            <div className="text-sm text-gray-500">Odhadovaný rozpočet</div>
             <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(Number(season.estimatedRentalCost))}</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="text-sm text-gray-500">Actual Costs Logged</div>
+            <div className="text-sm text-gray-500">Skutečné náklady</div>
             <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalActualCosts)}</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="text-sm text-gray-500">Total Deposits</div>
+            <div className="text-sm text-gray-500">Celkem zálohy</div>
             <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalDeposits)}</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
-            <div className="text-sm text-gray-500">Practices</div>
+            <div className="text-sm text-gray-500">Tréninky</div>
             <div className="text-xl font-bold text-gray-900 mt-1">
               {heldPractices} <span className="text-sm font-normal text-gray-500">/ {season.practices.length}</span>
             </div>
             {cancelledPractices > 0 && (
-              <div className="text-xs text-red-500">{cancelledPractices} cancelled</div>
+              <div className="text-xs text-red-500">{cancelledPractices} zrušeno</div>
             )}
           </div>
         </div>
 
-        {/* Player balances */}
+        {/* Zůstatky hráčů */}
         <section>
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">Player Balances</h2>
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">Zůstatky hráčů</h2>
           {playerBalances.length === 0 ? (
-            <p className="text-gray-500 text-sm">No players in this season.</p>
+            <p className="text-gray-500 text-sm">Žádní hráči v této sezóně.</p>
           ) : (
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Player</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Practices</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Cost Owed</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Deposits</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Balance</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Hráč</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Tréninky</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Dluh</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Zálohy</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Zůstatek</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -115,27 +121,27 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
           )}
         </section>
 
-        {/* Practice list */}
+        {/* Seznam tréninků */}
         <section>
           <h2 className="text-lg font-semibold text-gray-800 mb-3">
-            Practices
+            Tréninky
             <span className="ml-2 text-sm font-normal text-gray-500">
-              Cost per practice: {formatCZK(costPerPractice)}
+              Náklady na trénink: {formatCZK(costPerPractice)}
             </span>
           </h2>
           {practiceCosts.length === 0 ? (
-            <p className="text-gray-500 text-sm">No practices scheduled.</p>
+            <p className="text-gray-500 text-sm">Žádné tréninky naplánovány.</p>
           ) : (
             <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <table className="w-full text-sm">
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Date</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Location</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Time</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Attendees</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Cost/Player</th>
-                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Status</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Datum</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Místo</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Čas</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Účastníci</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Náklady/hráč</th>
+                    <th className="text-left px-4 py-3 font-semibold text-gray-600">Stav</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -147,7 +153,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
                       <td className="px-4 py-3 text-right text-gray-600">
                         {pc.permanentAttendeeCount}
                         {pc.adHocCount > 0 && (
-                          <span className="text-xs text-blue-500 ml-1">+{pc.adHocCount} ad-hoc</span>
+                          <span className="text-xs text-blue-500 ml-1">+{pc.adHocCount} náhr.</span>
                         )}
                       </td>
                       <td className="px-4 py-3 text-right text-gray-600">
@@ -159,7 +165,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
                           pc.status === 'cancelled' ? 'bg-red-100 text-red-700' :
                           'bg-blue-100 text-blue-700'
                         }`}>
-                          {pc.status}
+                          {statusLabel(pc.status)}
                         </span>
                       </td>
                     </tr>

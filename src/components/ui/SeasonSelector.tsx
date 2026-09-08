@@ -29,10 +29,10 @@ export function SeasonSelector({
       }}
       className="border border-gray-300 rounded px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
     >
-      <option value="">Select season...</option>
+      <option value="">Vyberte sezónu...</option>
       {seasons.map(s => (
         <option key={s.id} value={s.id}>
-          {s.name}{s.isActive ? ' (Active)' : ''}
+          {s.name}{s.isActive ? ' (Aktivní)' : ''}
         </option>
       ))}
     </select>

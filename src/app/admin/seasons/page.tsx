@@ -10,35 +10,35 @@ export default async function SeasonsPage() {
 
   return (
     <AdminLayout>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Seasons</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Sezóny</h1>
 
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
-        <h2 className="text-lg font-semibold mb-4">Create New Season</h2>
+        <h2 className="text-lg font-semibold mb-4">Vytvořit novou sezónu</h2>
         <form action={createSeasonAction} className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Season Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Název sezóny</label>
             <input
               name="name"
               type="text"
               required
-              placeholder="e.g. Autumn 2026"
+              placeholder="např. Podzim 2026"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Estimated Total Rental (CZK)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Odhadovaný celkový nájem (Kč)</label>
             <input
               name="estimatedRentalCost"
               type="number"
               min="0"
               step="100"
               required
-              placeholder="e.g. 15000"
+              placeholder="např. 15000"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Datum začátku</label>
             <input
               name="startDate"
               type="date"
@@ -47,7 +47,7 @@ export default async function SeasonsPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Datum konce</label>
             <input
               name="endDate"
               type="date"
@@ -60,7 +60,7 @@ export default async function SeasonsPage() {
               type="submit"
               className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium"
             >
-              Create Season
+              Vytvořit sezónu
             </button>
           </div>
         </form>
@@ -77,7 +77,7 @@ export default async function SeasonsPage() {
                 <h3 className="text-lg font-semibold text-gray-900">{season.name}</h3>
                 {season.isActive && (
                   <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                    Active
+                    Aktivní
                   </span>
                 )}
               </div>
@@ -85,7 +85,7 @@ export default async function SeasonsPage() {
                 {formatDate(season.startDate)} – {formatDate(season.endDate)}
               </p>
               <p className="text-sm text-gray-600 mt-1">
-                Estimated rental: <strong>{formatCZK(Number(season.estimatedRentalCost))}</strong>
+                Odhadovaný nájem: <strong>{formatCZK(Number(season.estimatedRentalCost))}</strong>
               </p>
             </div>
             <div className="flex gap-3 flex-shrink-0">
@@ -103,14 +103,14 @@ export default async function SeasonsPage() {
                       : 'bg-green-100 text-green-800 hover:bg-green-200'
                   }`}
                 >
-                  {season.isActive ? 'Deactivate' : 'Activate'}
+                  {season.isActive ? 'Deaktivovat' : 'Aktivovat'}
                 </button>
               </form>
             </div>
           </div>
         ))}
         {seasons.length === 0 && (
-          <p className="text-gray-500 text-center py-8">No seasons yet. Create one above.</p>
+          <p className="text-gray-500 text-center py-8">Zatím žádné sezóny. Vytvořte jednu výše.</p>
         )}
       </div>
     </AdminLayout>

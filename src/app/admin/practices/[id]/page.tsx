@@ -42,38 +42,44 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
   const adHocAttendees = practice.attendances.filter(a => a.type === 'ADHOC');
   const totalAdHocFees = adHocAttendees.reduce((s, a) => s + (a.adHocFee ? Number(a.adHocFee) : 0), 0);
 
+  function statusLabel(status: string) {
+    if (status === 'completed') return 'Odehráno';
+    if (status === 'cancelled') return 'Zrušeno';
+    return 'Naplánováno';
+  }
+
   return (
     <AdminLayout>
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/admin/practices" className="text-blue-600 hover:underline text-sm">← Practices</Link>
+        <Link href="/admin/practices" className="text-blue-600 hover:underline text-sm">← Tréninky</Link>
         <h1 className="text-2xl font-bold text-gray-900">
-          Practice — {formatDate(practice.date)}
+          Trénink — {formatDate(practice.date)}
         </h1>
         <span className={`px-2 py-0.5 rounded-full text-sm font-medium ${
           practice.status === 'completed' ? 'bg-green-100 text-green-700' :
           practice.status === 'cancelled' ? 'bg-red-100 text-red-700' :
           'bg-blue-100 text-blue-700'
         }`}>
-          {practice.status}
+          {statusLabel(practice.status)}
         </span>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Left: practice info + status */}
+        {/* Levý sloupec: detaily + stav */}
         <div className="md:col-span-1 space-y-4">
           <div className="bg-white rounded-lg border border-gray-200 p-5">
-            <h2 className="font-semibold text-gray-800 mb-3">Details</h2>
+            <h2 className="font-semibold text-gray-800 mb-3">Detaily</h2>
             <dl className="space-y-2 text-sm">
               <div>
-                <dt className="text-gray-500">Location</dt>
+                <dt className="text-gray-500">Místo</dt>
                 <dd className="font-medium">{practice.location}</dd>
               </div>
               <div>
-                <dt className="text-gray-500">Time</dt>
+                <dt className="text-gray-500">Čas</dt>
                 <dd className="font-medium">{practice.startTime}–{practice.endTime}</dd>
               </div>
               <div>
-                <dt className="text-gray-500">Season</dt>
+                <dt className="text-gray-500">Sezóna</dt>
                 <dd className="font-medium">{practice.season.name}</dd>
               </div>
             </dl>
@@ -81,19 +87,19 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
             <form action={updatePractice} className="mt-4 space-y-3">
               <input type="hidden" name="id" value={practice.id} />
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Stav</label>
                 <select
                   name="status"
                   defaultValue={practice.status}
                   className="w-full border border-gray-300 rounded px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="scheduled">Scheduled</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
+                  <option value="scheduled">Naplánováno</option>
+                  <option value="completed">Odehráno</option>
+                  <option value="cancelled">Zrušeno</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Poznámky</label>
                 <textarea
                   name="notes"
                   defaultValue={practice.notes || ''}
@@ -105,27 +111,27 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
                 type="submit"
                 className="bg-gray-700 text-white px-4 py-1.5 rounded text-sm hover:bg-gray-800 transition"
               >
-                Save
+                Uložit
               </button>
             </form>
           </div>
 
-          {/* Ad-hoc summary */}
+          {/* Shrnutí náhradníků */}
           {adHocAttendees.length > 0 && (
             <div className="bg-white rounded-lg border border-gray-200 p-5">
-              <h2 className="font-semibold text-gray-800 mb-2">Ad-hoc Income</h2>
+              <h2 className="font-semibold text-gray-800 mb-2">Příjmy za náhradníky</h2>
               <p className="text-2xl font-bold text-green-600">{formatCZK(totalAdHocFees)}</p>
-              <p className="text-sm text-gray-500">{adHocAttendees.length} ad-hoc attendee(s)</p>
+              <p className="text-sm text-gray-500">{adHocAttendees.length} náhradník(ů)</p>
             </div>
           )}
         </div>
 
-        {/* Right: attendance */}
+        {/* Pravý sloupec: docházka */}
         <div className="md:col-span-2 space-y-6">
-          {/* Permanent players */}
+          {/* Stálí hráči */}
           <div className="bg-white rounded-lg border border-gray-200 p-5">
             <h2 className="font-semibold text-gray-800 mb-4">
-              Season Players ({permanentAttendees.size}/{practice.season.seasonPlayers.length} present)
+              Hráči sezóny ({permanentAttendees.size}/{practice.season.seasonPlayers.length} přítomno)
             </h2>
             <div className="space-y-2">
               {practice.season.seasonPlayers.map(sp => {
@@ -161,20 +167,20 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
                           : 'bg-green-100 text-green-600 hover:bg-green-200'
                       }`}
                     >
-                      {isPresent ? 'Mark absent' : 'Mark present'}
+                      {isPresent ? 'Označit nepřítomným' : 'Označit přítomným'}
                     </button>
                   </form>
                 );
               })}
               {practice.season.seasonPlayers.length === 0 && (
-                <p className="text-sm text-gray-500">No players in this season.</p>
+                <p className="text-sm text-gray-500">Žádní hráči v této sezóně.</p>
               )}
             </div>
           </div>
 
-          {/* Ad-hoc attendees */}
+          {/* Náhradníci */}
           <div className="bg-white rounded-lg border border-gray-200 p-5">
-            <h2 className="font-semibold text-gray-800 mb-4">Ad-hoc Attendees</h2>
+            <h2 className="font-semibold text-gray-800 mb-4">Náhradníci</h2>
 
             {adHocAttendees.length > 0 && (
               <div className="mb-4 space-y-2">
@@ -189,7 +195,7 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
                         <input type="hidden" name="attendanceId" value={a.id} />
                         <input type="hidden" name="practiceId" value={practice.id} />
                         <button type="submit" className="text-red-400 hover:text-red-600 text-xs">
-                          Remove
+                          Odebrat
                         </button>
                       </form>
                     </div>
@@ -201,22 +207,22 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
             <form action={addAdHocAttendee} className="flex flex-wrap gap-3 items-end">
               <input type="hidden" name="practiceId" value={practice.id} />
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Name</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Jméno</label>
                 <input
                   name="adHocName"
                   required
-                  placeholder="Guest name"
+                  placeholder="Jméno hosta"
                   className="border border-gray-300 rounded px-2 py-1.5 text-sm w-40 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">Fee (CZK)</label>
+                <label className="block text-xs font-medium text-gray-700 mb-1">Poplatek (Kč)</label>
                 <input
                   name="adHocFee"
                   type="number"
                   step="50"
                   min="0"
-                  placeholder="e.g. 100"
+                  placeholder="např. 100"
                   className="border border-gray-300 rounded px-2 py-1.5 text-sm w-28 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -224,7 +230,7 @@ export default async function PracticeDetailPage({ params }: { params: { id: str
                 type="submit"
                 className="bg-blue-600 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-700 transition"
               >
-                Add Ad-hoc
+                Přidat náhradníka
               </button>
             </form>
           </div>

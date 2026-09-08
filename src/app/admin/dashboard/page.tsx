@@ -42,25 +42,25 @@ export default async function DashboardPage() {
 
   return (
     <AdminLayout>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-6">Přehled</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <div className="text-sm text-gray-500">Total Players</div>
+          <div className="text-sm text-gray-500">Celkem hráčů</div>
           <div className="text-2xl font-bold text-gray-900 mt-1">{totalPlayers}</div>
         </div>
         <div className="bg-white rounded-lg border border-gray-200 p-4">
-          <div className="text-sm text-gray-500">Total Seasons</div>
+          <div className="text-sm text-gray-500">Celkem sezón</div>
           <div className="text-2xl font-bold text-gray-900 mt-1">{totalSeasons}</div>
         </div>
         {activeSeason && (
           <>
             <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm text-gray-500">Season Players</div>
+              <div className="text-sm text-gray-500">Hráči v sezóně</div>
               <div className="text-2xl font-bold text-gray-900 mt-1">{activeSeason.seasonPlayers.length}</div>
             </div>
             <div className="bg-white rounded-lg border border-gray-200 p-4">
-              <div className="text-sm text-gray-500">Practices</div>
+              <div className="text-sm text-gray-500">Tréninky</div>
               <div className="text-2xl font-bold text-gray-900 mt-1">{activeSeason.practices.length}</div>
             </div>
           </>
@@ -71,37 +71,37 @@ export default async function DashboardPage() {
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              Active Season: {activeSeason.name}
+              Aktivní sezóna: {activeSeason.name}
             </h2>
             <dl className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <dt className="text-gray-500">Period</dt>
+                <dt className="text-gray-500">Období</dt>
                 <dd className="font-medium">{formatDate(activeSeason.startDate)} – {formatDate(activeSeason.endDate)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Budget</dt>
+                <dt className="text-gray-500">Rozpočet</dt>
                 <dd className="font-medium">{formatCZK(Number(activeSeason.estimatedRentalCost))}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Cost/Practice</dt>
+                <dt className="text-gray-500">Náklady/trénink</dt>
                 <dd className="font-medium">{formatCZK(stats?.costPerPractice || 0)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Total Deposits</dt>
+                <dt className="text-gray-500">Celkem zálohy</dt>
                 <dd className="font-medium">
                   {formatCZK(activeSeason.deposits.reduce((s, d) => s + Number(d.amount), 0))}
                 </dd>
               </div>
             </dl>
             <Link href={`/season/${activeSeason.id}`} className="mt-4 inline-block text-blue-600 text-sm hover:underline">
-              View public page →
+              Zobrazit veřejnou stránku →
             </Link>
           </div>
 
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">Upcoming Practices</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">Nadcházející tréninky</h2>
             {upcomingPractices.length === 0 ? (
-              <p className="text-gray-500 text-sm">No upcoming practices.</p>
+              <p className="text-gray-500 text-sm">Žádné nadcházející tréninky.</p>
             ) : (
               <ul className="space-y-2">
                 {upcomingPractices.slice(0, 5).map(p => (
@@ -121,18 +121,18 @@ export default async function DashboardPage() {
         </div>
       ) : (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
-          <p className="text-yellow-800">No active season. <Link href="/admin/seasons" className="underline font-medium">Create one.</Link></p>
+          <p className="text-yellow-800">Žádná aktivní sezóna. <Link href="/admin/seasons" className="underline font-medium">Vytvořte ji.</Link></p>
         </div>
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {[
-          { href: '/admin/seasons', label: 'Manage Seasons', icon: '📅' },
-          { href: '/admin/players', label: 'Manage Players', icon: '👥' },
-          { href: '/admin/schedule', label: 'Schedule', icon: '🗓' },
-          { href: '/admin/practices', label: 'Practices & Attendance', icon: '🏐' },
-          { href: '/admin/deposits', label: 'Deposits', icon: '💰' },
-          { href: '/admin/costs', label: 'Rental Costs', icon: '🧾' },
+          { href: '/admin/seasons', label: 'Správa sezón', icon: '📅' },
+          { href: '/admin/players', label: 'Správa hráčů', icon: '👥' },
+          { href: '/admin/schedule', label: 'Rozvrh', icon: '🗓' },
+          { href: '/admin/practices', label: 'Tréninky a docházka', icon: '🏐' },
+          { href: '/admin/deposits', label: 'Zálohy', icon: '💰' },
+          { href: '/admin/costs', label: 'Náklady na nájem', icon: '🧾' },
         ].map(item => (
           <Link
             key={item.href}

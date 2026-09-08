@@ -1,13 +1,13 @@
 import Link from 'next/link';
 
 const navLinks = [
-  { href: '/admin/dashboard', label: 'Dashboard' },
-  { href: '/admin/seasons', label: 'Seasons' },
-  { href: '/admin/players', label: 'Players' },
-  { href: '/admin/schedule', label: 'Schedule' },
-  { href: '/admin/practices', label: 'Practices' },
-  { href: '/admin/deposits', label: 'Deposits' },
-  { href: '/admin/costs', label: 'Costs' },
+  { href: '/admin/dashboard', label: 'Přehled' },
+  { href: '/admin/seasons', label: 'Sezóny' },
+  { href: '/admin/players', label: 'Hráči' },
+  { href: '/admin/schedule', label: 'Rozvrh' },
+  { href: '/admin/practices', label: 'Tréninky' },
+  { href: '/admin/deposits', label: 'Zálohy' },
+  { href: '/admin/costs', label: 'Náklady' },
 ];
 
 export function NavBar() {
@@ -27,7 +27,7 @@ export function NavBar() {
       ))}
       <div className="ml-auto">
         <Link href="/" className="text-sm hover:text-blue-200 transition-colors">
-          Public view →
+          Veřejná stránka →
         </Link>
       </div>
     </nav>

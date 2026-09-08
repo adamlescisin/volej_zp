@@ -5,6 +5,13 @@ import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
+
+function statusLabel(status: string) {
+  if (status === 'completed') return 'Odehráno';
+  if (status === 'cancelled') return 'Zrušeno';
+  return 'Naplánováno';
+}
+
 export default async function PracticesPage({
   searchParams,
 }: {
@@ -39,13 +46,13 @@ export default async function PracticesPage({
           {practice.notes && <div className="text-xs text-gray-400 mt-0.5">{practice.notes}</div>}
         </div>
         <div className="flex items-center gap-3 text-sm">
-          <span className="text-gray-500">{practice._count.attendances} attendees</span>
+          <span className="text-gray-500">{practice._count.attendances} účastníků</span>
           <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
             practice.status === 'completed' ? 'bg-green-100 text-green-700' :
             practice.status === 'cancelled' ? 'bg-red-100 text-red-700' :
             'bg-blue-100 text-blue-700'
           }`}>
-            {practice.status}
+            {statusLabel(practice.status)}
           </span>
           <span className="text-blue-600">→</span>
         </div>
@@ -56,7 +63,7 @@ export default async function PracticesPage({
   return (
     <AdminLayout>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Practices</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Tréninky</h1>
         <SeasonSelector seasons={seasons} selectedId={selectedSeasonId} basePath="/admin/practices" />
       </div>
 
@@ -64,7 +71,7 @@ export default async function PracticesPage({
         <div className="space-y-6">
           {upcoming.length > 0 && (
             <section>
-              <h2 className="text-lg font-semibold text-gray-700 mb-3">Upcoming ({upcoming.length})</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-3">Nadcházející ({upcoming.length})</h2>
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 {upcoming.map(p => <PracticeRow key={p.id} practice={p} />)}
               </div>
@@ -73,7 +80,7 @@ export default async function PracticesPage({
 
           {past.length > 0 && (
             <section>
-              <h2 className="text-lg font-semibold text-gray-700 mb-3">Past ({past.length})</h2>
+              <h2 className="text-lg font-semibold text-gray-700 mb-3">Minulé ({past.length})</h2>
               <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 {[...past].reverse().map(p => <PracticeRow key={p.id} practice={p} />)}
               </div>
@@ -82,16 +89,16 @@ export default async function PracticesPage({
 
           {practices.length === 0 && (
             <p className="text-gray-500 text-sm">
-              No practices for this season. Go to{' '}
+              Žádné tréninky pro tuto sezónu. Přejděte na{' '}
               <Link href={`/admin/schedule?seasonId=${selectedSeasonId}`} className="text-blue-600 underline">
-                Schedule
+                Rozvrh
               </Link>{' '}
-              to generate them.
+              a vygenerujte je.
             </p>
           )}
         </div>
       ) : (
-        <p className="text-gray-500">Please select a season.</p>
+        <p className="text-gray-500">Prosím vyberte sezónu.</p>
       )}
     </AdminLayout>
   );
