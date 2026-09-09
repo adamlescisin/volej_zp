@@ -6,7 +6,7 @@ const navLinks = [
   { href: '/admin/players', label: 'Hráči' },
   { href: '/admin/schedule', label: 'Rozvrh' },
   { href: '/admin/practices', label: 'Tréninky' },
-  { href: '/admin/deposits', label: 'Zálohy' },
+  { href: '/admin/deposits', label: 'Pokladna' },
   { href: '/admin/costs', label: 'Náklady' },
 ];
 
