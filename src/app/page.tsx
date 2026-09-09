@@ -6,6 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
   const seasons = await prisma.season.findMany({
+    where: { isActive: true },
     orderBy: { startDate: 'desc' },
     include: {
       _count: {

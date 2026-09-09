@@ -31,7 +31,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
     },
   });
 
-  if (!season) notFound();
+  if (!season || !season.isActive) notFound();
 
   const { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental } = computeSeasonStats(
     season.practices,
