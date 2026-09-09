@@ -42,6 +42,13 @@ export default async function DepositsPage({
       })
     : [];
 
+  // Non-cancelled practice count for estimated total calculation
+  const nonCancelledPracticeCount = selectedSeasonId
+    ? await prisma.practice.count({
+        where: { seasonId: selectedSeasonId, status: { not: 'cancelled' } },
+      })
+    : 0;
+
   // Actual rental costs for reconciliation
   const rentalCosts = selectedSeasonId
     ? await prisma.rentalCost.findMany({
@@ -55,7 +62,7 @@ export default async function DepositsPage({
   const totalAdHocFees = adHocAttendances.reduce((s, a) => s + (a.adHocFee ? Number(a.adHocFee) : 0), 0);
   const totalPokladna = totalDeposits + totalAdHocFees;
 
-  const estimatedRental = selectedSeason ? Number(selectedSeason.estimatedRentalCost) : 0;
+  const estimatedRental = selectedSeason ? Number(selectedSeason.estimatedRentalCost) * nonCancelledPracticeCount : 0;
   const actualRental = rentalCosts.reduce((s, c) => s + Number(c.amount), 0);
 
   return (

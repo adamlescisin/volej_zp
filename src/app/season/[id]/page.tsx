@@ -33,7 +33,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
 
   if (!season) notFound();
 
-  const { practiceCosts, playerBalances, costPerPractice } = computeSeasonStats(
+  const { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental } = computeSeasonStats(
     season.practices,
     season.seasonPlayers,
     season.deposits,
@@ -65,7 +65,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="text-sm text-gray-500">Odhadovaný rozpočet</div>
-            <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(Number(season.estimatedRentalCost))}</div>
+            <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalEstimatedRental)}</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="text-sm text-gray-500">Skutečné náklady</div>

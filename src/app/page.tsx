@@ -9,7 +9,10 @@ export default async function HomePage() {
     orderBy: { startDate: 'desc' },
     include: {
       _count: {
-        select: { practices: true, seasonPlayers: true },
+        select: {
+          practices: { where: { status: { not: 'cancelled' } } },
+          seasonPlayers: true,
+        },
       },
     },
   });
@@ -48,7 +51,7 @@ export default async function HomePage() {
             <div className="flex gap-6 text-sm text-blue-800 mb-4">
               <span>{activeSeason._count.seasonPlayers} hráčů</span>
               <span>{activeSeason._count.practices} tréninků</span>
-              <span>Rozpočet: {formatCZK(Number(activeSeason.estimatedRentalCost))}</span>
+              <span>Odhadovaný nájem: {formatCZK(Number(activeSeason.estimatedRentalCost) * activeSeason._count.practices)}</span>
             </div>
             <Link
               href={`/season/${activeSeason.id}`}

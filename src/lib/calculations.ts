@@ -50,9 +50,9 @@ export function computeSeasonStats(
   const plannedPractices = practices.filter(p => p.status !== 'cancelled');
   const totalPlanned = plannedPractices.length;
 
-  const costPerPractice = totalPlanned > 0
-    ? Number(estimatedRentalCost) / totalPlanned
-    : 0;
+  // estimatedRentalCost is the per-practice rental cost; total is derived from non-cancelled count
+  const costPerPractice = Number(estimatedRentalCost);
+  const totalEstimatedRental = costPerPractice * totalPlanned;
 
   // Build practice cost info
   const practiceCosts: PracticeCostInfo[] = practices.map(practice => {
@@ -113,5 +113,5 @@ export function computeSeasonStats(
     };
   });
 
-  return { practiceCosts, playerBalances, costPerPractice };
+  return { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental };
 }

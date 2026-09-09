@@ -6,7 +6,12 @@ import { createSeasonAction, updateSeasonAction, toggleSeasonActiveAction } from
 export const dynamic = 'force-dynamic';
 
 export default async function SeasonsPage() {
-  const seasons = await prisma.season.findMany({ orderBy: { startDate: 'desc' } });
+  const seasons = await prisma.season.findMany({
+    orderBy: { startDate: 'desc' },
+    include: {
+      _count: { select: { practices: { where: { status: { not: 'cancelled' } } } } },
+    },
+  });
 
   return (
     <AdminLayout>
@@ -26,14 +31,14 @@ export default async function SeasonsPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Odhadovaný celkový nájem (Kč)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Cena nájmu za trénink (Kč)</label>
             <input
               name="estimatedRentalCost"
               type="number"
               min="0"
               step="100"
               required
-              placeholder="např. 15000"
+              placeholder="např. 800"
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
@@ -86,7 +91,10 @@ export default async function SeasonsPage() {
                   {formatDate(season.startDate)} – {formatDate(season.endDate)}
                 </p>
                 <p className="text-sm text-gray-600 mt-1">
-                  Odhadovaný nájem: <strong>{formatCZK(Number(season.estimatedRentalCost))}</strong>
+                  Cena/trénink: <strong>{formatCZK(Number(season.estimatedRentalCost))}</strong>
+                  {' · '}
+                  Odhadovaný celkem: <strong>{formatCZK(Number(season.estimatedRentalCost) * season._count.practices)}</strong>
+                  <span className="text-gray-400 ml-1">({season._count.practices} tréninků)</span>
                 </p>
               </div>
               <div className="flex gap-3 flex-shrink-0">
@@ -123,7 +131,7 @@ export default async function SeasonsPage() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-500 mb-1">Odhadovaný nájem (Kč)</label>
+                <label className="block text-xs font-medium text-gray-500 mb-1">Cena/trénink (Kč)</label>
                 <input
                   name="estimatedRentalCost"
                   type="number"

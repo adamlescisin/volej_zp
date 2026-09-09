@@ -79,12 +79,12 @@ export default async function DashboardPage() {
                 <dd className="font-medium">{formatDate(activeSeason.startDate)} – {formatDate(activeSeason.endDate)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Rozpočet</dt>
+                <dt className="text-gray-500">Cena/trénink</dt>
                 <dd className="font-medium">{formatCZK(Number(activeSeason.estimatedRentalCost))}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-gray-500">Náklady/trénink</dt>
-                <dd className="font-medium">{formatCZK(stats?.costPerPractice || 0)}</dd>
+                <dt className="text-gray-500">Odhadovaný nájem celkem</dt>
+                <dd className="font-medium">{formatCZK(stats?.totalEstimatedRental || 0)}</dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-gray-500">Celkem zálohy</dt>
@@ -131,7 +131,7 @@ export default async function DashboardPage() {
           { href: '/admin/players', label: 'Správa hráčů', icon: '👥' },
           { href: '/admin/schedule', label: 'Rozvrh', icon: '🗓' },
           { href: '/admin/practices', label: 'Tréninky a docházka', icon: '🏐' },
-          { href: '/admin/deposits', label: 'Zálohy', icon: '💰' },
+          { href: '/admin/deposits', label: 'Pokladna', icon: '💰' },
           { href: '/admin/costs', label: 'Náklady na nájem', icon: '🧾' },
         ].map(item => (
           <Link

@@ -30,7 +30,8 @@ export default async function CostsPage({
 
   const selectedSeason = seasons.find(s => s.id === selectedSeasonId);
   const totalActual = rentalCosts.reduce((s, c) => s + Number(c.amount), 0);
-  const estimatedTotal = selectedSeason ? Number(selectedSeason.estimatedRentalCost) : 0;
+  const nonCancelledCount = practices.filter(p => p.status !== 'cancelled').length;
+  const estimatedTotal = selectedSeason ? Number(selectedSeason.estimatedRentalCost) * nonCancelledCount : 0;
 
   return (
     <AdminLayout>
@@ -44,7 +45,7 @@ export default async function CostsPage({
           {selectedSeason && (
             <div className="grid grid-cols-3 gap-4 mb-6">
               <div className="bg-white rounded-lg border border-gray-200 p-4">
-                <div className="text-sm text-gray-500">Odhadovaná celková částka</div>
+                <div className="text-sm text-gray-500">Odhadovaný celkový nájem</div>
                 <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(estimatedTotal)}</div>
               </div>
               <div className="bg-white rounded-lg border border-gray-200 p-4">
