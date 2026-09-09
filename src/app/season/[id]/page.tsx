@@ -19,6 +19,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
       seasonPlayers: {
         include: { player: true },
         where: { active: true },
+        orderBy: { player: { name: 'asc' } },
       },
       practices: {
         include: {

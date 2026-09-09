@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import { AdminLayout } from '@/components/ui/AdminLayout';
-import { createPlayerAction, assignToSeasonAction, removeFromSeasonAction } from './actions';
+import { createPlayerAction, updatePlayerAction, assignToSeasonAction, removeFromSeasonAction } from './actions';
 
 export const dynamic = 'force-dynamic';
 export default async function PlayersPage() {
@@ -51,14 +51,29 @@ export default async function PlayersPage() {
 
           return (
             <div key={player.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
-              <div className="flex items-start justify-between gap-4 flex-wrap">
-                <div>
-                  <h3 className="font-semibold text-gray-900">{player.name}</h3>
-                  {player.contact && (
-                    <p className="text-sm text-gray-500">{player.contact}</p>
-                  )}
-                </div>
-              </div>
+              <form action={updatePlayerAction} className="flex items-center gap-3 flex-wrap">
+                <input type="hidden" name="id" value={player.id} />
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  defaultValue={player.name}
+                  className="font-semibold text-gray-900 border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-36"
+                />
+                <input
+                  name="contact"
+                  type="text"
+                  defaultValue={player.contact ?? ''}
+                  placeholder="Kontakt"
+                  className="text-sm text-gray-500 border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-36"
+                />
+                <button
+                  type="submit"
+                  className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded transition-colors font-medium"
+                >
+                  Uložit
+                </button>
+              </form>
 
               <div className="mt-3 pt-3 border-t border-gray-100">
                 <p className="text-sm font-medium text-gray-600 mb-2">Členství v sezónách:</p>
