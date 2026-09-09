@@ -4,6 +4,7 @@ import { SeasonSelector } from '@/components/ui/SeasonSelector';
 import { formatDate } from '@/lib/utils';
 import Link from 'next/link';
 import { deletePracticesAction } from './actions';
+import { DeletePracticesButton } from './DeleteButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -100,15 +101,7 @@ export default async function PracticesPage({
       {selectedSeasonId ? (
         <form action={deletePracticesAction}>
           <div className="flex justify-end mb-4">
-            <button
-              type="submit"
-              className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700 transition-colors"
-              onClick={(e) => {
-                if (!confirm('Smazat vybrané tréninky? Tato akce je nevratná.')) e.preventDefault();
-              }}
-            >
-              Smazat vybrané
-            </button>
+            <DeletePracticesButton />
           </div>
 
           <div className="space-y-6">
