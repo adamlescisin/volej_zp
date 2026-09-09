@@ -98,7 +98,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
                   <tr>
                     <th className="text-left px-4 py-3 font-semibold text-gray-600">Hráč</th>
                     <th className="text-right px-4 py-3 font-semibold text-gray-600">Tréninky</th>
-                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Dluh</th>
+                    <th className="text-right px-4 py-3 font-semibold text-gray-600">Náklady</th>
                     <th className="text-right px-4 py-3 font-semibold text-gray-600">Zálohy</th>
                     <th className="text-right px-4 py-3 font-semibold text-gray-600">Zůstatek</th>
                   </tr>
