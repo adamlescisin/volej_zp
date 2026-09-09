@@ -72,3 +72,13 @@ export async function removeAttendee(formData: FormData) {
 
   revalidatePath(`/admin/practices/${practiceId}`);
 }
+
+export async function deletePracticesAction(formData: FormData) {
+  const ids = formData.getAll('practiceId') as string[];
+  if (!ids.length) return;
+  // No cascade in schema — clear FK references before deleting
+  await prisma.rentalCost.updateMany({ where: { practiceId: { in: ids } }, data: { practiceId: null } });
+  await prisma.attendance.deleteMany({ where: { practiceId: { in: ids } } });
+  await prisma.practice.deleteMany({ where: { id: { in: ids } } });
+  revalidatePath('/admin/practices');
+}
