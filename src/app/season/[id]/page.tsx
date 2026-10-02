@@ -34,7 +34,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
 
   if (!season || !season.isActive) notFound();
 
-  const { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental, completedCount } = computeSeasonStats(
+  const { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental, completedCount, totalAdHocFees } = computeSeasonStats(
     season.practices,
     season.seasonPlayers,
     season.deposits,
@@ -74,7 +74,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="text-sm text-gray-500">Celkem zálohy</div>
-            <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalDeposits)}</div>
+            <div className="text-xl font-bold text-gray-900 mt-1">{formatCZK(totalDeposits + totalAdHocFees)}</div>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-4">
             <div className="text-sm text-gray-500">Tréninky</div>
@@ -112,7 +112,7 @@ export default async function SeasonDetailPage({ params }: { params: { id: strin
                       <td className="px-4 py-3 text-right text-gray-600">{completedCount}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{pb.practicesAttended}</td>
                       <td className="px-4 py-3 text-right text-gray-600">{formatCZK(pb.totalCostOwed)}</td>
-                      <td className="px-4 py-3 text-right text-gray-600">{formatCZK(pb.totalDeposits)}</td>
+                      <td className="px-4 py-3 text-right text-gray-600">{formatCZK(pb.totalDeposits + pb.adHocShare)}</td>
                       <td className={`px-4 py-3 text-right font-semibold ${pb.balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                         {pb.balance >= 0 ? '+' : ''}{formatCZK(pb.balance)}
                       </td>

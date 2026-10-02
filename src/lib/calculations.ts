@@ -24,6 +24,7 @@ export type PlayerBalance = {
   practicesAttended: number;
   totalCostOwed: number;
   totalDeposits: number;
+  adHocShare: number;
   balance: number; // positive = credit, negative = owes
 };
 
@@ -88,6 +89,14 @@ export function computeSeasonStats(
     };
   });
 
+  // Compute total ad-hoc fees from completed practices
+  const totalAdHocFees = practices
+    .filter(p => p.status === 'completed')
+    .flatMap(p => p.attendances.filter(a => a.type === 'ADHOC' && a.adHocFee !== null))
+    .reduce((sum, a) => sum + Number(a.adHocFee), 0);
+
+  const adHocSharePerPlayer = activePlayersCount > 0 ? totalAdHocFees / activePlayersCount : 0;
+
   // Build player balances
   const depositsByPlayer = new Map<string, number>();
   for (const deposit of deposits) {
@@ -111,9 +120,10 @@ export function computeSeasonStats(
       practicesAttended: playerPractices.length,
       totalCostOwed: costOwedPerPlayer,
       totalDeposits,
-      balance: totalDeposits - costOwedPerPlayer,
+      adHocShare: adHocSharePerPlayer,
+      balance: totalDeposits + adHocSharePerPlayer - costOwedPerPlayer,
     };
   });
 
-  return { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental, completedCount };
+  return { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental, completedCount, totalAdHocFees };
 }
