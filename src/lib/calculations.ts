@@ -49,10 +49,17 @@ export function computeSeasonStats(
   // Total planned practices = all non-cancelled practices
   const plannedPractices = practices.filter(p => p.status !== 'cancelled');
   const totalPlanned = plannedPractices.length;
+  const completedCount = practices.filter(p => p.status === 'completed').length;
 
   // estimatedRentalCost is the per-practice rental cost; total is derived from non-cancelled count
   const costPerPractice = Number(estimatedRentalCost);
   const totalEstimatedRental = costPerPractice * totalPlanned;
+
+  // Shared cost owed per player = completed practices × unit cost ÷ active player count
+  const activePlayersCount = seasonPlayers.length;
+  const costOwedPerPlayer = activePlayersCount > 0
+    ? completedCount * costPerPractice / activePlayersCount
+    : 0;
 
   // Build practice cost info
   const practiceCosts: PracticeCostInfo[] = practices.map(practice => {
@@ -96,22 +103,17 @@ export function computeSeasonStats(
       );
     });
 
-    const totalCostOwed = playerPractices.reduce((sum, practice) => {
-      const info = practiceCosts.find(pc => pc.practiceId === practice.id);
-      return sum + (info?.costPerPlayer || 0);
-    }, 0);
-
     const totalDeposits = depositsByPlayer.get(sp.playerId) || 0;
 
     return {
       playerId: sp.playerId,
       playerName: sp.player.name,
       practicesAttended: playerPractices.length,
-      totalCostOwed,
+      totalCostOwed: costOwedPerPlayer,
       totalDeposits,
-      balance: totalDeposits - totalCostOwed,
+      balance: totalDeposits - costOwedPerPlayer,
     };
   });
 
-  return { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental };
+  return { practiceCosts, playerBalances, costPerPractice, totalEstimatedRental, completedCount };
 }
